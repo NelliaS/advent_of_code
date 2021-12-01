@@ -1,6 +1,9 @@
 list_of_measurements = []
 
-with open("day_1.txt", encoding="utf-8") as f:
+with open(
+    "/Users/nelaslezakova/Private/advent_of_code/advent_of_code_2021/day_1/day_1.txt",
+    encoding="utf-8",
+) as f:
     for line in f:
         list_of_measurements.append(int(line.rstrip()))
 
@@ -58,8 +61,12 @@ def count_number_of_sequent_increases_of_triplets(measurements) -> int:
     increase_count = 0
 
     for i in range(len(measurements) - 3):
-        first = sum(measurements[i : i + 3])
+        if i == 0:
+            first = sum(measurements[i : i + 3])
+        else:
+            first = second
         second = sum(measurements[i + 1 : i + 4])
+
         if second > first:
             increase_count += 1
 
