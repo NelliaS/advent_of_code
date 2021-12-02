@@ -1,9 +1,6 @@
 list_of_measurements = []
 
-with open(
-    "/Users/nelaslezakova/Private/advent_of_code/advent_of_code_2021/day_1/day_1.txt",
-    encoding="utf-8",
-) as f:
+with open("day_1.txt", encoding="utf-8",) as f:
     for line in f:
         list_of_measurements.append(int(line.rstrip()))
 
