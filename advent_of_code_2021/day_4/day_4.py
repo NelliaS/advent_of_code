@@ -1,7 +1,7 @@
-from typing import Tuple, List
+from typing import Tuple, List, Any
 
 
-def parse_data(file_name) -> Tuple[List[int], List[int]]:
+def parse_data(file_name: str) -> Tuple[List[int], List[List[Any]]]:
     """
     Read data from a file and save it to 2 variables:
     - list_of_draws is a list of integers (numbers to be drawn)
@@ -11,7 +11,7 @@ def parse_data(file_name) -> Tuple[List[int], List[int]]:
         file_name (str): name of file in folder / or absolute path
 
     Returns:
-        Tuple[List[int], List[int]]: (list_of_draws, boards_data)
+        Tuple[List[int], List[List[Any]]]: (list_of_draws, boards_data)
     """
     with open(file_name, encoding="utf-8") as f:
         lines = f.readlines()
@@ -21,7 +21,7 @@ def parse_data(file_name) -> Tuple[List[int], List[int]]:
 
         # make a nested list of boards' numbers
         list_of_boards = []
-        one_board_data = []
+        one_board_data: list = []
         for line in lines[2:]:
             if line == "\n":
                 list_of_boards.append(one_board_data)
@@ -49,8 +49,8 @@ class Board:
         ]
     """
 
-    def __init__(self, one_board_data):
-        self.marked = []
+    def __init__(self, one_board_data: list):
+        self.marked: list = []
         self.all_numbers = []
         self.board = one_board_data
 
@@ -58,7 +58,7 @@ class Board:
             for number in row:
                 self.all_numbers.append(number)
 
-    def mark_number(self, number, position) -> None:
+    def mark_number(self, number: int, position: tuple) -> None:
         """
         Mark drawn number in list "board"
         Marked number will be transformed into tuple, with 'd' as second element
@@ -73,7 +73,7 @@ class Board:
         self.board[row][column] = (number, "d")
         self.marked.append(number)
 
-    def find_number_to_mark(self, drawn_number) -> None:
+    def find_number_to_mark(self, drawn_number: int) -> None:
         """
         Search board for a drawn number.
         If there is any, mark it with a method mark_number()
@@ -105,8 +105,7 @@ class Board:
                     count_marks += 1
             if count_marks == marks_to_win:
                 return True
-            else:
-                count_marks = 0
+            count_marks = 0
 
         # win in column
         count_marks = 0
@@ -117,12 +116,11 @@ class Board:
                     count_marks += 1
             if count_marks == marks_to_win:
                 return True
-            else:
-                count_marks = 0
+            count_marks = 0
 
         return False
 
-    def calculate_score(self, last_number_drawn):
+    def calculate_score(self, last_number_drawn: int):
         """
         Calculate score of board, sum all unmarked numbers and multiply by
         last number drawn.
@@ -138,7 +136,7 @@ class Board:
         return sum_unmarked * last_number_drawn
 
 
-def apply_one_round(winning, game_boards, drawn_number):
+def apply_one_round(winning: list, game_boards: list, drawn_number: int):
     remaining_boards = game_boards[::]
 
     for board in game_boards:
@@ -150,10 +148,10 @@ def apply_one_round(winning, game_boards, drawn_number):
     return winning, remaining_boards
 
 
-def main(file_name):
+def main(file_name: str):
     list_of_draws, list_of_boards = parse_data(file_name)
-    game_boards = []
-    winning = []
+    game_boards: list = []
+    winning: list = []
 
     for board_data in list_of_boards:
         game_boards.append(Board(board_data))
