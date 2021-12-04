@@ -1,4 +1,3 @@
-from pytest import mark, raises
 from day_4 import parse_data, Board, main
 
 
