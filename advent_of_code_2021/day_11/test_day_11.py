@@ -1,9 +1,5 @@
 from pytest import mark
-from day_11 import (
-    parse,
-    identify_neighbours,
-    complete_one_round
-)
+from day_11 import parse, identify_neighbours, complete_one_round, main
 
 test_energy_levels = {
     (0, 0): 5, (0, 1): 4, (0, 2): 8, (0, 3): 3, (0, 4): 1, (0, 5): 4,
@@ -33,25 +29,61 @@ def test_parse() -> None:
     ["central_position", "area_size", "adjacent_positions"],
     [
         ((4, 9), (10, 10), [(3, 9), (5, 9), (4, 8), (5, 8), (3, 8)]),
-        ((1, 5), (10, 10), [(0, 5), (2, 5), (1, 6), (1, 4), (0, 6), (2, 6), (2, 4), (0, 4)]),
-        ((2, 7), (10, 10), [(1, 7), (3, 7), (2, 8), (2, 6), (1, 8), (3, 8), (3, 6), (1, 6)]),
+        (
+            (1, 5),
+            (10, 10),
+            [(0, 5), (2, 5), (1, 6), (1, 4), (0, 6), (2, 6), (2, 4), (0, 4)],
+        ),
+        (
+            (2, 7),
+            (10, 10),
+            [(1, 7), (3, 7), (2, 8), (2, 6), (1, 8), (3, 8), (3, 6), (1, 6)],
+        ),
     ],
 )
 def test_identify_neighbours(central_position, area_size, adjacent_positions) -> None:
-    assert (
-        identify_neighbours(central_position, area_size)
-        == adjacent_positions
-    )
+    assert identify_neighbours(central_position, area_size) == adjacent_positions
+
 
 @mark.parametrize(
     ["energy_levels", "count_flashes", "area_size", "result"],
     [
-        (parse('day_11_test.txt'), 0, (10, 10), (parse('day_11_test_1_round.txt'), 0)),
-        (parse('day_11_test_1_round.txt'), 0, (10, 10), (parse('day_11_test_2_round.txt'), 35)),
-        (parse('day_11_test_2_round.txt'), 35, (10, 10), (parse('day_11_test_3_round.txt'), 81)),
-        (parse('day_11_test_3_round.txt'), 81, (10, 10), (parse('day_11_test_4_round.txt'), 97)),
-        (parse('day_11_test_4_round.txt'), 97, (10, 10), (parse('day_11_test_5_round.txt'), 105)),
+        (
+            parse("day_11_test.txt"),
+            0,
+            (10, 10),
+            (parse("day_11_test_1_round.txt"), 0, False),
+        ),
+        (
+            parse("day_11_test_1_round.txt"),
+            0,
+            (10, 10),
+            (parse("day_11_test_2_round.txt"), 35, False),
+        ),
+        (
+            parse("day_11_test_2_round.txt"),
+            35,
+            (10, 10),
+            (parse("day_11_test_3_round.txt"), 80, False),
+        ),
+        (
+            parse("day_11_test_3_round.txt"),
+            80,
+            (10, 10),
+            (parse("day_11_test_4_round.txt"), 96, False),
+        ),
+        (
+            parse("day_11_test_4_round.txt"),
+            97,
+            (10, 10),
+            (parse("day_11_test_5_round.txt"), 105, False),
+        ),
     ],
 )
-def test_complete_one_round(energy_levels, count_flashes, area_size, result):
+def test_complete_one_round(energy_levels, count_flashes, area_size, result) -> None:
     assert complete_one_round(energy_levels, count_flashes, area_size) == result
+
+
+def test_main() -> None:
+    assert main("day_11_test.txt", (10, 10), 10) == (204, 195)
+    assert main("day_11_test.txt", (10, 10), 100) == (1656, 195)

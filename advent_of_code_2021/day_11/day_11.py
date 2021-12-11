@@ -1,8 +1,7 @@
-from typing import List, Any, Tuple
-from statistics import median
+from typing import List, Dict, Tuple
 
 
-def parse(file_name: str) -> List[Any]:
+def parse(file_name: str) -> Dict[Tuple[int, int], int]:
     energy_levels = {}
     with open(file_name) as f:
         for x, line in enumerate(f):
@@ -11,7 +10,9 @@ def parse(file_name: str) -> List[Any]:
     return energy_levels
 
 
-def identify_neighbours(central_position, area_size):
+def identify_neighbours(
+    central_position: tuple, area_size: tuple
+) -> List[Tuple[int, int]]:
     adjacent_positions = []
 
     max_x, max_y = area_size
@@ -36,7 +37,9 @@ def identify_neighbours(central_position, area_size):
     return adjacent_positions
 
 
-def complete_one_round(energy_levels, count_flashes, area_size):
+def complete_one_round(
+    energy_levels: dict, count_flashes: int, area_size: tuple
+) -> Tuple[Dict[Tuple[int, int], int], int, bool]:
     flashed_this_round = []
     flashed_positions = []
 
@@ -66,26 +69,43 @@ def complete_one_round(energy_levels, count_flashes, area_size):
                     and neighbour not in new_flashed_positions
                 ):
                     new_flashed_positions.append(neighbour)
-                    flashed_this_round.append(position)
+                    flashed_this_round.append(neighbour)
         new_flashed_positions = list(set(new_flashed_positions))
         flashed_positions = new_flashed_positions
 
-    # finally add all flashed octopuses in count_flashes
-    # and reset them to 0
+    # finally count all flashed octopuses and reset them to 0
     for position, octopus_energy in energy_levels.items():
         if octopus_energy > 9:
             energy_levels[position] = 0
             count_flashes += 1
 
-    return energy_levels, count_flashes
+    # check for synchronization
+    for value in energy_levels.values():
+        if value != 0:
+            synchronized = False
+            break
+        synchronized = True
+
+    return energy_levels, count_flashes, synchronized
 
 
-def main(file_name, area_size):
+def main(file_name: str, area_size: tuple, max_rounds: int) -> Tuple[int, int]:
     energy_levels = parse(file_name)
     count_flashes = 0
-    for n in range(100):
-        energy_levels, count_flashes = complete_one_round(
+    synchronized = False
+    rounds = 0
+    while not synchronized:
+        rounds += 1
+        energy_levels, count_flashes, synchronized = complete_one_round(
             energy_levels, count_flashes, area_size
         )
+        if rounds == max_rounds:
+            part_1 = count_flashes
 
-    return count_flashes
+    part_2 = rounds
+    return part_1, rounds
+
+
+part_1, part_2 = main("day_11.txt", (10, 10), 100)
+print(f"Part 1: {part_1}")
+print(f"Part 2: {part_2}")
