@@ -48,9 +48,9 @@ def test_identify_neighbours(central_position, area_size, adjacent_positions) ->
     [
         (parse('day_11_test.txt'), 0, (10, 10), (parse('day_11_test_1_round.txt'), 0)),
         (parse('day_11_test_1_round.txt'), 0, (10, 10), (parse('day_11_test_2_round.txt'), 35)),
-        (parse('day_11_test_2_round.txt'), 0, (10, 10), (parse('day_11_test_3_round.txt'), 81)),
-        (parse('day_11_test_3_round.txt'), 35, (10, 10), (parse('day_11_test_4_round.txt'), 97)),
-        (parse('day_11_test_4_round.txt'), 81, (10, 10), (parse('day_11_test_5_round.txt'), 105)),
+        (parse('day_11_test_2_round.txt'), 35, (10, 10), (parse('day_11_test_3_round.txt'), 81)),
+        (parse('day_11_test_3_round.txt'), 81, (10, 10), (parse('day_11_test_4_round.txt'), 97)),
+        (parse('day_11_test_4_round.txt'), 97, (10, 10), (parse('day_11_test_5_round.txt'), 105)),
     ],
 )
 def test_complete_one_round(energy_levels, count_flashes, area_size, result):
