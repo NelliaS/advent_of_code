@@ -1,3 +1,4 @@
+import re
 from copy import deepcopy
 from dataclasses import dataclass, field
 from math import inf
@@ -96,12 +97,16 @@ class Hero:
             self.health += spell.health
             return spell
 
-    def apply_effects(self):
+    def apply_effects(self, on_move='boss'):
         """Apply effects on oneself, deduct turns. If effect worns out, remove it."""
         new_effects = []
         for spell in self.effects:
             if spell.damage:
-                self.health -= spell.damage
+                if spell.id == 5:
+                    if on_move == 'wizard':
+                        self.health -= spell.damage
+                else:
+                    self.health -= spell.damage
             if spell.mana:
                 self.mana += spell.mana
             if spell.turns != 0:
@@ -124,14 +129,16 @@ class Arena:
         wizard = Hero(health=50, mana=500)
         if hardmode:
             wizard.effects.append(Spell(id=5, turns=inf, damage=1, self_target=True, mana_cost=0))
-        boss = Hero(health=55, damage=8)
+        with open('day_22.txt') as file:
+            health, damage = re.findall('[0-9]+', file.read())
+            boss = Hero(health=int(health), damage=int(damage))
         return wizard, boss
 
     @staticmethod
     def fight(spell, wizard, boss) -> tuple:
         try:
             # wizard turn
-            wizard.apply_effects()
+            wizard.apply_effects(on_move='wizard')
             boss.apply_effects()
             effect = wizard.cast_spell(spell)
             if effect:
@@ -173,23 +180,5 @@ class Simulator:
 simulator1, simulator2 = Simulator(), Simulator()
 simulator1.round(Arena.create_fighters())
 simulator2.round(Arena.create_fighters(hardmode=True))
-
 print(f'Result of part 1: "{simulator1.least_win_mana}"')
-print(f'Result of part 2: "{simulator2.least_win_mana}"')  # should be 1289
-
-
-def functionality_test(spell_ids, hardmode=False):
-    wizard, boss = Arena.create_fighters(hardmode)
-    spells = [
-        Spell(id=0, mana_cost=53, damage=4),
-        Spell(id=1, mana_cost=73, damage=2, health=2),
-        Spell(id=2, self_target=True, mana_cost=113, armor=7, turns=5),
-        Spell(id=3, mana_cost=173, damage=3, turns=5),
-        Spell(id=4, self_target=True, mana_cost=229, mana=101, turns=4),
-    ]
-    for spell_id in spell_ids:
-        wizard, boss, win = Arena.fight(deepcopy(spells[spell_id]), deepcopy(wizard), deepcopy(boss))
-    print(wizard.health)
-
-
-functionality_test([3, 4, 1, 3, 4, 2, 3, 1, 0], hardmode=True)
+print(f'Result of part 2: "{simulator2.least_win_mana}"')
