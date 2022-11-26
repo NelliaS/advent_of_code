@@ -1,9 +1,5 @@
 import re
-import time
 from itertools import combinations_with_replacement, permutations
-
-from icecream import ic
-from line_profiler_pycharm import profile
 
 
 def prepare_data() -> dict[str, list]:
@@ -40,7 +36,6 @@ def part1(instructions):
     return calculate_sum(memory)
 
 
-@profile
 def apply_mask(mask, value, part1=True):
     result = ''
     for mask_number, value_number in zip(mask, value):
@@ -51,7 +46,6 @@ def apply_mask(mask, value, part1=True):
     return result
 
 
-@profile
 def part2(instructions):
     memory = {}
     instructions_reversed = dict(
