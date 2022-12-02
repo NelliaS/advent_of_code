@@ -15,4 +15,4 @@ def part2(elves_calories: list[int]) -> int:
 
 
 print(f'Result of part 1: "{part1(elves_calories)}"')
-print(f'Result of part 1: "{part2(elves_calories)}"')
+print(f'Result of part 2: "{part2(elves_calories)}"')
