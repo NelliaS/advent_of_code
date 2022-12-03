@@ -1,8 +1,6 @@
 import math
 from itertools import combinations, pairwise
 
-from line_profiler_pycharm import profile
-
 with open('day_10.txt') as f:
     numbers = [int(number.rstrip()) for number in f.readlines()]
     numbers.extend([0, max(numbers) + 3])
