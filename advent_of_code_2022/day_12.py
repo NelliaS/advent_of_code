@@ -2,7 +2,6 @@ import math
 from collections import defaultdict
 
 import networkx as nx
-from icecream import ic
 
 
 class GoalFinder:
